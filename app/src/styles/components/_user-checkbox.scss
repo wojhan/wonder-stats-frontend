@@ -1,0 +1,12 @@
+.user-checkbox {
+  cursor: pointer;
+  background: $list-background-color;
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  margin-top: 15px;
+  &:hover {
+    background: darken($list-background-color, 5);
+    transition: ease-in .3s;
+  }
+}

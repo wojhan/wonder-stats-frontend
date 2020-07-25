@@ -1,0 +1,25 @@
+#game {
+  background: $primary-background;
+  background-size: cover;
+  min-height: 100vh;
+  width: 100vw;
+  padding: 20px;
+  margin: 0;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+
+  #available-games, #user-header {
+    width: 100%;
+  }
+
+  #user-header {
+    margin-bottom: 20px;
+
+    .avatar {
+      margin-bottom: 10px;
+    }
+  }
+}

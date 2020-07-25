@@ -1,0 +1,13 @@
+<main id="game">
+  <div class="row">
+    <div class="col-12">
+      <app-user-header [game]="currentGame" [inGame]="playerInGame" [user]="user" (leave)="onLeave($event)"></app-user-header>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-available-games *ngIf="!playerInGame" [currentGame]="currentGame" (joinClick)="onJoinClick($event)"></app-available-games>
+      <app-running-game *ngIf="playerInGame && currentGame" [currentGame]="currentGame" [user]="user" (finished)="onFinished($event)"></app-running-game>
+    </div>
+  </div>
+</main>

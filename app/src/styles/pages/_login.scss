@@ -1,0 +1,19 @@
+#login {
+  background: $primary-background;
+  height: 100vh;
+  width: 100vw;
+
+  h1 {
+    color: $light-font;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .login-card {
+    width: 600px;
+
+    .card {
+      background: $list-background-color;
+    }
+  }
+}

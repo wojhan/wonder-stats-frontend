@@ -1,0 +1,101 @@
+<div id="available-games" class="w-100">
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">militaria</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za wojsko" formControlName="military">
+            </div>
+          </div>
+          <div class="col-auto" [hidden]="!formUpdating.military">
+            ...
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">pieniądze</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za pieniądze" formControlName="coins">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">cuda świata</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za cuda świata" formControlName="wonders">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">kultura</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za kulturę" formControlName="culture">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">handel</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za handel" formControlName="trade">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">gildie</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za gildie" formControlName="guild">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">nauka</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za naukę" formControlName="science">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">miasta</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za miasta" formControlName="cities">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">liderzy</div>
+              </div>
+              <input type="number" class="form-control" placeholder="Punkty za liderów" formControlName="leaders">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

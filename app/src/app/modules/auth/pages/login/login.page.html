@@ -1,0 +1,29 @@
+<section class="d-flex flex-row justify-content-center align-items-center" id="login">
+  <div class="login-card">
+    <div class="row">
+      <div class="col">
+        <h1>Kto gra?</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <div class="row" *ngFor="let user of users">
+              <div class="col">
+                <div class="media user-checkbox" (click)="login(user)">
+                  <img
+                    alt="..."
+                    class="avatar align-self-center mr-3" src="{{user.avatar}}">
+                  <div class="media-body">
+                    {{user.username}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

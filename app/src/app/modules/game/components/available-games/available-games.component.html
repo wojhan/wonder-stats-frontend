@@ -1,0 +1,33 @@
+<div id="available-games">
+  <div class="card" *ngIf="!currentGame">
+    <div class="card-body">
+      <p>Aktualnie brak gier</p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentGame">
+    <div class="card-header">
+      <h4>Aktualnie trwająca gra</h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <p> Gra rozpoczęta: {{currentGame.created_at | date: 'dd MMMM yyyy, HH:mm': undefined: 'pl'}}</p>
+        </div>
+      </div>
+      <div class="row d-flex align-items-center">
+        <div class="col">
+          <p>Gracze:</p>
+          <img *ngFor="let player of currentGame.players" src="{{player.avatar}}" alt="{{player.username}}" class="avatar small">
+<!--          <ol>-->
+<!--            <li *ngFor="let player of currentGame.players">-->
+<!--              {{player.username}}-->
+<!--            </li>-->
+<!--          </ol>-->
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-outline-primary" (click)="join()">Dołącz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col">
+    <button class="btn btn-block btn-danger" (click)="finish()">Zakończ grę</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="table">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th *ngFor="let column of columns">
+              <ng-container *ngIf="column == null">
+                Brak
+              </ng-container>
+              <ng-container *ngIf="column">
+                <img alt="..." class="avatar small align-self-center mr-3" src="{{column.player.avatar}}">
+                    </ng-container>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">Militaria</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['military'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Pieniądze</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['coins'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Cuda świata</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['wonders'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Kultura</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['culture'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Handel</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['trade'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Gildie</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['guild'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Nauka</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['science'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Miasta</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['cities'] }}</td>
+          </tr>
+          <tr>
+            <td scope="row">Liderzy</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['leaders']}}</td>
+          </tr>
+          <tr>
+            <td scope="row">Suma</td>
+            <td *ngFor="let column of columns; let i = index">{{columns[i]?.sum}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

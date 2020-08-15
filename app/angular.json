@@ -120,6 +120,12 @@
           }
         }
       }
-    }},
-  "defaultProject": "wonder-stats-frontend"
+    }
+  },
+  "defaultProject": "wonder-stats-frontend",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

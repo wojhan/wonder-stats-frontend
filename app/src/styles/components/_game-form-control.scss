@@ -1,0 +1,14 @@
+.game-form-control {
+  @include point-type-list('.input-group-text', null, true);
+  @include point-type-list('.form-control', null, true, $stats-cell-opacity);
+  .input-group-text {
+    min-width: 62px;
+  }
+  .form-control{
+  }
+
+  img {
+    max-height: 24px;
+    width: auto;
+  }
+}

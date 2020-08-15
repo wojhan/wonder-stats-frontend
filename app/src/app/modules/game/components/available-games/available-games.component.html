@@ -1,33 +1,27 @@
-<div id="available-games">
-  <div class="card" *ngIf="!currentGame">
-    <div class="card-body">
-      <p>Aktualnie brak gier</p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentGame">
+<div class="game-card">
+  <div class="card" *ngIf="currentGame; else noGame">
     <div class="card-header">
-      <h4>Aktualnie trwająca gra</h4>
+      <h1>Aktualnie trwająca gra</h1>
     </div>
     <div class="card-body">
-      <div class="row">
-        <div class="col">
-          <p> Gra rozpoczęta: {{currentGame.created_at | date: 'dd MMMM yyyy, HH:mm': undefined: 'pl'}}</p>
-        </div>
-      </div>
-      <div class="row d-flex align-items-center">
-        <div class="col">
-          <p>Gracze:</p>
-          <img *ngFor="let player of currentGame.players" src="{{player.avatar}}" alt="{{player.username}}" class="avatar small">
-<!--          <ol>-->
-<!--            <li *ngFor="let player of currentGame.players">-->
-<!--              {{player.username}}-->
-<!--            </li>-->
-<!--          </ol>-->
-        </div>
-        <div class="col-auto">
-          <button class="btn btn-outline-primary" (click)="join()">Dołącz</button>
+      <div class="game-info">
+        <h2>Gra rozpoczęta: {{currentGame.created_at | date: 'dd MMMM yyyy, HH:mm': undefined: 'pl'}}</h2>
+        <div class="game-details">
+          <div class="players">
+            <img *ngFor="let player of currentGame.players" src="{{player.avatar}}" alt="{{player.username}}" class="avatar small">
+          </div>
+          <button class="btn btn-outline-primary btn-sm"><fa-icon [icon]="faSignInAlt" (click)="join()"></fa-icon></button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
+<ng-template #noGame>
+  <div class="card">
+    <div class="card-body no-game">
+      <p>Aktualnie brak trwających gier</p>
+    </div>
+  </div>
+</ng-template>

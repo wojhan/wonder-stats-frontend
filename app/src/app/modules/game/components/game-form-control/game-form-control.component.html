@@ -1,0 +1,10 @@
+<div class="game-form-control input-group">
+  <div class="input-group-prepend">
+    <div [ngClass]="inputGroupClasses">
+      <img src="{{imageUrl}}" *ngIf="imageUrl" alt="{{placeholder}}" />
+    </div>
+  </div>
+  <input type="number" [ngClass]="classes" placeholder="{{placeholder}}" [(ngModel)]="input"
+         (ngModelChange)="onChange($event)"
+         (blur)="onTouch()">
+</div>

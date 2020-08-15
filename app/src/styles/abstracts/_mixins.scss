@@ -1,0 +1,33 @@
+$color-based-types: 'military', 'culture', 'trade', 'guild', 'science', 'cities', 'image';
+$colors: $stats-red-color, $stats-blue-color,$stats-yellow-color,$stats-purple-color,$stats-green-color,$stats-black-color, $stats-white-color;
+
+@mixin point-type-list($attr, $custom-name: '', $is-class: true, $opacity: 1) {
+  $attr-list: null;
+  @for $i from 0 to length($color-based-types) {
+    $type: nth($color-based-types, $i + 1);
+    $attr-prefix: '#';
+    @if($is-class) {
+      $attr-prefix:'.';
+    }
+
+    @if ($custom-name) {
+      #{unquote($attr)}#{$attr-prefix}#{$type}-#{$custom-name} {
+        background-color: rgba(nth($colors, $i+1), $opacity);
+        border-color: darken(nth($colors, $i+1), 10);
+      }
+    }
+    @else {
+      #{unquote($attr)}#{$attr-prefix}#{$type} {
+        background-color: rgba(nth($colors, $i+1), $opacity);
+        border-color: darken(nth($colors, $i+1), 10);
+      }
+    }
+
+
+    $attr-list: append($attr-list, unquote("#{unquote($attr)}#{$attr-prefix}#{$type}"), comma);
+  }
+
+  #{$attr-list} {
+    //TODO: decide whether is useful or not
+  }
+}

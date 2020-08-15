@@ -4,94 +4,61 @@
       <form [formGroup]="form">
         <div class="row">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">militaria</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za wojsko" formControlName="military">
-            </div>
-          </div>
-          <div class="col-auto" [hidden]="!formUpdating.military">
-            ...
+            <app-game-form-control [formControl]="formControls.military" placeholder="Punkty za wojsko" color="military"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">pieniądze</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za pieniądze" formControlName="coins">
-            </div>
+            <app-game-form-control imageUrl="/assets/images/form-icons/coins.png" placeholder="Punkty za pieniądze" color="image" [formControl]="formControls.coins"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">cuda świata</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za cuda świata" formControlName="wonders">
-            </div>
+            <app-game-form-control imageUrl="/assets/images/form-icons/stage.png" placeholder="Punkty za cuda świata" color="image" [formControl]="formControls.wonders"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">kultura</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za kulturę" formControlName="culture">
-            </div>
+            <app-game-form-control placeholder="Punkty za kulturę" color="culture" [formControl]="formControls.culture"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">handel</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za handel" formControlName="trade">
-            </div>
+            <app-game-form-control placeholder="Punkty za handel" color="trade" [formControl]="formControls.trade"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">gildie</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za gildie" formControlName="guild">
-            </div>
+            <app-game-form-control placeholder="Punkty za gildie" color="guild" [formControl]="formControls.guild"></app-game-form-control>
+          </div>
+        </div>
+        <div class="row mt-2 align-items-center">
+          <div class="col">
+            <app-game-form-control placeholder="Punkty za naukę" color="science" [formControl]="formControls.science"></app-game-form-control>
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-sm btn-success">XD</button>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">nauka</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za naukę" formControlName="science">
-            </div>
+            <app-game-form-control placeholder="Punkty za miasta" color="cities" [formControl]="formControls.cities"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">miasta</div>
-              </div>
-              <input type="number" class="form-control" placeholder="Punkty za miasta" formControlName="cities">
-            </div>
+            <app-game-form-control placeholder="Punkty za liderów" imageUrl="/assets/images/form-icons/leader.png" color="image" [formControl]="formControls.leaders"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <div class="input-group">
+            <div class="game-form-control input-group">
               <div class="input-group-prepend">
-                <div class="input-group-text">liderzy</div>
+                <div class="input-group-text white">
+                  ∑
+                </div>
               </div>
-              <input type="number" class="form-control" placeholder="Punkty za liderów" formControlName="leaders">
+              <input disabled [value]="total" class="form-control">
             </div>
           </div>
         </div>

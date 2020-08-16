@@ -1,11 +1,20 @@
 import { WebSocketSubject } from 'rxjs/internal-compatibility';
-import { Observable, Subscription } from 'rxjs';
+import { iif, Observable, of, Subscription, throwError } from 'rxjs';
 import { webSocket } from 'rxjs/webSocket';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { delay, filter, retryWhen, take, timeout } from 'rxjs/operators';
+import {
+  concatMap,
+  delay,
+  filter,
+  retryWhen,
+  take,
+  timeout,
+} from 'rxjs/operators';
 import { getRandomHash } from './utils';
 import { WebSocketI } from './WebSocketI';
+import { SpinnerOverlayService } from './services/spinner-overlay.service';
+import { retryPipe } from './pipes/websocket.pipes';
 
 export class GameWebSocket implements WebSocketI {
   appComponent: Component;
@@ -15,14 +24,19 @@ export class GameWebSocket implements WebSocketI {
   webSocketSubscription: Subscription;
   url = environment.wsUrl + 'ws/game/';
 
+  spinner: SpinnerOverlayService;
+
+  messages = 0;
+
   constructor(gameId: number, appComponent: Component) {
+    this.spinner = SpinnerOverlayService.instance;
     this.appComponent = appComponent;
     this.gameId = gameId;
     this.webSocketSubject = webSocket(this.url + gameId + '/');
     this.webSocketListener = this.webSocketSubject.asObservable();
 
     this.webSocketSubscription = this.webSocketListener
-      .pipe(retryWhen((errors) => errors.pipe(delay(4000))))
+      .pipe(retryPipe)
       .subscribe({
         next: (message) => {
           this.onMessage(message);
@@ -31,12 +45,21 @@ export class GameWebSocket implements WebSocketI {
           this.onComplete();
         },
         error: (err) => {
+          console.log(err);
           this.onError(err);
         },
       });
   }
 
   onMessage(message): void {
+    if (message.sender) {
+      this.messages--;
+
+      if (this.messages <= 0) {
+        this.messages = 0;
+        this.spinner.hide();
+      }
+    }
     if (!message.sender) {
       const property = {
         point_update: 'onPointUpdate',
@@ -69,6 +92,8 @@ export class GameWebSocket implements WebSocketI {
     pointType: any,
     value: number
   ): Observable<any> {
+    this.messages++;
+    this.spinner.show();
     const sender = getRandomHash();
     this.webSocketSubject.next({
       type: 'update_point_request',
@@ -91,6 +116,9 @@ export class GameWebSocket implements WebSocketI {
   }
 
   getPoints(gameId: number, playerId: number): Observable<any> {
+    this.messages++;
+    this.spinner.show();
+
     const sender = getRandomHash();
     this.webSocketSubject.next({
       type: 'get_points_request',
@@ -111,6 +139,9 @@ export class GameWebSocket implements WebSocketI {
   }
 
   finish(): Observable<any> {
+    this.messages++;
+    this.spinner.show();
+
     const sender = getRandomHash();
     this.webSocketSubject.next({
       type: 'finish_game_request',

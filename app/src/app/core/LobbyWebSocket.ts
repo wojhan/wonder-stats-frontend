@@ -15,6 +15,8 @@ import {
 } from 'rxjs/operators';
 import { WebSocketI } from './WebSocketI';
 import { getRandomHash } from './utils';
+import { SpinnerOverlayService } from './services/spinner-overlay.service';
+import { retryPipe } from './pipes/websocket.pipes';
 
 export class LobbyWebSocket implements WebSocketI {
   appComponent: any;
@@ -23,13 +25,18 @@ export class LobbyWebSocket implements WebSocketI {
   webSocketSubscription: Subscription;
   url = environment.wsUrl + 'ws/game-lobby/';
 
+  messages = 0;
+
+  spinner: SpinnerOverlayService;
+
   constructor(appComponent: Component) {
+    this.spinner = SpinnerOverlayService.instance;
     this.appComponent = appComponent;
     this.webSocketSubject = webSocket(this.url);
     this.webSocketListener = this.webSocketSubject.asObservable();
 
     this.webSocketSubscription = this.webSocketListener
-      .pipe(retryWhen((errors) => errors.pipe(delay(4000))))
+      .pipe(retryPipe)
       .subscribe({
         next: (message) => {
           this.onMessage(message);
@@ -38,12 +45,21 @@ export class LobbyWebSocket implements WebSocketI {
           this.onComplete();
         },
         error: (err) => {
+          console.log(err);
           this.onError(err);
         },
       });
   }
 
   onMessage(message): void {
+    if (message.sender) {
+      this.messages--;
+
+      if (this.messages <= 0) {
+        this.messages = 0;
+        this.spinner.hide();
+      }
+    }
     if (!message.sender) {
       switch (message.message_type) {
         case 'game_info_response':
@@ -80,6 +96,8 @@ export class LobbyWebSocket implements WebSocketI {
   }
 
   joinToGame(gameId: number, playerId: number): Observable<Game> {
+    this.messages++;
+    this.spinner.show();
     const sender = getRandomHash();
     this.webSocketSubject.next({
       type: 'player_joined_request',
@@ -100,6 +118,8 @@ export class LobbyWebSocket implements WebSocketI {
   }
 
   createGame(): Observable<any> {
+    this.messages++;
+    this.spinner.show();
     const sender = getRandomHash();
 
     this.webSocketSubject.next({
@@ -118,6 +138,8 @@ export class LobbyWebSocket implements WebSocketI {
   }
 
   leaveGame(gameId: number, playerId: number): Observable<Game> {
+    this.messages++;
+    this.spinner.show();
     const sender = getRandomHash();
     this.webSocketSubject.next({
       type: 'player_left_request',

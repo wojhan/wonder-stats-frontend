@@ -1,0 +1,49 @@
+.game-card {
+  h1,h2 {
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 1.1rem;
+    letter-spacing: 0.01rem;
+    font-weight: 300;
+  }
+
+  h2 {
+    font-size: 0.9rem;
+    letter-spacing: 0.01rem;
+  }
+  .no-game {
+    text-align: center;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .game-info {
+    display: flex;
+    flex-direction: column;
+
+    .game-details {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+
+      .players {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        img {
+          margin: 5px 5px 5px 0;
+
+          &:last-of-type {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+
+
+  }
+}

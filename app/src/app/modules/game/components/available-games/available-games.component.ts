@@ -10,6 +10,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Observable, Subscription } from 'rxjs';
 import { Game } from '../../../../core/models/Game';
 import { environment } from '../../../../../environments/environment';
+import { IconDefinition, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-available-games',
@@ -22,6 +23,8 @@ export class AvailableGamesComponent {
 
   @Output()
   joinClick: EventEmitter<number> = new EventEmitter<number>();
+
+  faSignInAlt: IconDefinition = faSignInAlt;
 
   constructor() {}
 

@@ -64,6 +64,8 @@ export class RunningGameComponent implements OnInit, OnChanges {
     leaders: false,
   };
 
+  total = 0;
+
   pointsLoaded = false;
 
   constructor() {}
@@ -75,6 +77,13 @@ export class RunningGameComponent implements OnInit, OnChanges {
       this.gameWebSocket.close();
       this.gameWebSocket = null;
     }
+  }
+
+  private recountTotal(): void {
+    this.total = Object.keys(this.form.value).reduce(
+      (sum, key) => sum + parseFloat(this.form.get(key).value || 0),
+      0
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -136,6 +145,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
           .subscribe({
             next: (message) => {
               this.formUpdating[keys[message.point_type - 1]] = false;
+              this.recountTotal();
             },
             error: (err) => {
               console.log(err);
@@ -151,6 +161,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
           console.log(this.form.controls);
           this.form.controls[keys[point.type - 1]].setValue(point.value);
         });
+        this.recountTotal();
         this.pointsLoaded = true;
       },
       error: (err) => {

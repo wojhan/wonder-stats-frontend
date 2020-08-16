@@ -12,6 +12,7 @@ import localePlExtra from '@angular/common/locales/extra/pl';
 import {registerLocaleData} from '@angular/common';
 import {UserService} from './core/services/user.service';
 import { ErrorComponent } from './error.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 registerLocaleData(localePl, localePlExtra);
@@ -24,7 +25,8 @@ registerLocaleData(localePl, localePlExtra);
     BrowserModule,
     NgbModule,
     RouterModule.forRoot(AppRoutes),
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }, UserService],
   bootstrap: [AppComponent]

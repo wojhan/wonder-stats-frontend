@@ -1,68 +1,60 @@
-<div class="row">
-  <div class="col">
-    <button class="btn btn-block btn-danger" (click)="finish()">Zakończ grę</button>
-  </div>
-</div>
-<div class="row">
-  <div class="col">
-    <div class="table">
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th *ngFor="let column of columns">
-              <ng-container *ngIf="column == null">
-                Brak
-              </ng-container>
-              <ng-container *ngIf="column">
-                <img alt="..." class="avatar small align-self-center mr-3" src="{{column.player.avatar}}">
-                    </ng-container>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td scope="row">Militaria</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['military'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Pieniądze</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['coins'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Cuda świata</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['wonders'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Kultura</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['culture'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Handel</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['trade'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Gildie</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['guild'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Nauka</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['science'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Miasta</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['cities'] }}</td>
-          </tr>
-          <tr>
-            <td scope="row">Liderzy</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.points['leaders']}}</td>
-          </tr>
-          <tr>
-            <td scope="row">Suma</td>
-            <td *ngFor="let column of columns; let i = index">{{columns[i]?.sum}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<button class="btn btn-block btn-danger">Zakończ grę</button>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+        <tr>
+          <th></th>
+          <th *ngFor="let column of columns">
+            <ng-container *ngIf="column == null">
+              Brak
+            </ng-container>
+            <ng-container *ngIf="column">
+              <img alt="..." class="avatar small" src="{{column.player.avatar}}">
+                  </ng-container>
+          </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <th scope="row" class="stats-header military-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell military-cell">{{columns[i]?.points['military'] }} </td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header image-header"><img src="/assets/images/form-icons/coins.png" alt="punkty za pieniądze"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell image-cell">{{columns[i]?.points['coins'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header image-header"><img src="/assets/images/form-icons/stage.png" alt="punkty za cuda świata"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell image-cell">{{columns[i]?.points['wonders'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header culture-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell culture-cell">{{columns[i]?.points['culture'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header trade-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell trade-cell">{{columns[i]?.points['trade'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header guild-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell guild-cell">{{columns[i]?.points['guild'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header science-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell science-cell">{{columns[i]?.points['science'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header cities-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell cities-cell">{{columns[i]?.points['cities'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header image-header"><img src="/assets/images/form-icons/leader.png" alt="punkty za liderów"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell leader-cell">{{columns[i]?.points['leaders']}}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header"></th>
+          <td *ngFor="let column of columns; let i = index">{{columns[i]?.sum}}</td>
+        </tr>
+      </tbody>
+  </table>
 </div>

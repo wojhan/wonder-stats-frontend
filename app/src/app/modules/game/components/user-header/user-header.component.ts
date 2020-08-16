@@ -11,6 +11,11 @@ import { UserService } from '../../../../core/services/user.service';
 import { take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Game } from '../../../../core/models/Game';
+import {
+  faArrowLeft,
+  faSignOutAlt,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-user-header',
@@ -30,6 +35,9 @@ export class UserHeaderComponent implements OnInit, OnChanges {
   @Input()
   inGame: boolean;
 
+  faSignOutAlt: IconDefinition = faSignOutAlt;
+  faArrowLeft: IconDefinition = faArrowLeft;
+
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {}
@@ -40,5 +48,8 @@ export class UserHeaderComponent implements OnInit, OnChanges {
     this.leave.emit(true);
   }
 
-  logout(): void {}
+  logout(): void {
+    localStorage.clear();
+    this.router.navigate(['/auth', 'login']);
+  }
 }

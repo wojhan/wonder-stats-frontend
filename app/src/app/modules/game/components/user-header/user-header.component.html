@@ -1,27 +1,17 @@
-<div id="user-header">
 <div class="card">
   <div class="card-body">
-    <div class="row d-flex align-items-center">
-      <div class="col-xl-auto col-sm-6">
-        <img
-          alt="..."
-          class="avatar align-self-center mr-3" src="{{user?.avatar}}">
-
+    <div class="user-game-info">
+      <div class="user-avatar-box">
+        <img src="{{user?.avatar}}" alt="{{user.username}}" class="avatar" />
+        <button class="btn btn-outline-primary btn-sm" (click)="onLeave()" *ngIf="inGame"><fa-icon [icon]="faArrowLeft"></fa-icon> </button>
+        <button class="btn btn-outline-primary btn-sm" (click)="logout()" *ngIf="!inGame"><fa-icon [icon]="faSignOutAlt"></fa-icon> </button>
       </div>
-      <div class="col-xl col-sm-6" *ngIf="inGame">
-        <div class="row">
-          <div class="col">
-            <ng-container *ngFor="let player of game?.players">
-              <img *ngIf="user.id !== player.id" class="avatar small align-self-center mr-3" src="{{player.avatar}}">
-            </ng-container>
-          </div>
-        </div>
-      </div>
-      <div class="col-auto">
-        <button class="btn btn-outline-primary" (click)="onLeave()" *ngIf="inGame">Wyjdź z gry</button>
-        <button class="btn btn-outline-primary" (click)="logout()" *ngIf="!inGame">Wyloguj się</button>
+      <div class="other-users-avatar-box" *ngIf="inGame">
+        <p>Pokonaj ich!</p>
+        <ng-container *ngFor="let player of game?.players" class="avatars">
+          <img *ngIf="user.id !== player.id" src="{{player.avatar}}" alt="{{player.username}}" class="avatar small" />
+        </ng-container>
       </div>
     </div>
   </div>
-</div>
 </div>

@@ -1,0 +1,15 @@
+#page {
+  background-size: cover;
+  background-color: $primary-background;
+  background-repeat: repeat;
+
+  min-height: 100vh;
+  min-width: 100vw;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0px 20px;
+}

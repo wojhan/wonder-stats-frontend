@@ -1,25 +1,45 @@
 #game {
-  background: $primary-background;
-  background-size: cover;
-  min-height: 100vh;
-  width: 100vw;
-  padding: 20px;
-  margin: 0;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-
-  #available-games, #user-header {
-    width: 100%;
-  }
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   #user-header {
-    margin-bottom: 20px;
 
-    .avatar {
-      margin-bottom: 10px;
+    .user-game-info {
+      display: flex;
+      align-items: stretch;
+
+      .user-avatar-box {
+        display: flex;
+        flex-direction: column;
+
+        .btn {
+          margin-top: 10px;
+        }
+      }
+
+      .other-users-avatar-box {
+        flex: 1;
+
+        p {
+          margin-left: 10px;
+          margin-bottom: 5px;
+          text-transform: uppercase;
+          letter-spacing: 0.02rem;
+        }
+
+        .avatars {
+        }
+
+        .avatar {
+          margin-left: 10px;
+        }
+      }
     }
+  }
+
+  #game-content {
+    margin-top: 20px;
+
   }
 }

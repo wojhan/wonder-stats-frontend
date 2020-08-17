@@ -1,0 +1,49 @@
+#game-science-calculator {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 600px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  h1 {
+    font-size: 0.9rem;
+    letter-spacing: 0.01rem;
+    word-spacing: 0.02rem;
+    text-transform: uppercase;
+    border-bottom: $primary-background solid 1px;
+  }
+
+  .desc {
+    font-size: 0.7rem;
+    letter-spacing: 0.01rem;
+    text-align: justify;
+  }
+
+  .point-inputs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+
+    .symbol-group {
+      display: flex;
+      flex-basis: 90px;
+      flex-grow: 1;
+      align-items: center;
+
+      .symbol {
+        max-width: 34px;
+        max-height: 31px;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-outline-danger {
+      margin-left: 10px;
+    }
+  }
+}

@@ -6,11 +6,13 @@ import { GameRoutes } from './game.routes';
 import { SharedModule } from '../../shared/shared.module';
 import { AvailableGamesComponent } from './components/available-games/available-games.component';
 import { RunningGameComponent } from './components/running-game/running-game.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserHeaderComponent } from './components/user-header/user-header.component';
 import { UserResolve } from '../../core/resolvers/UserResolve';
 import { GameFormControlComponent } from './components/game-form-control/game-form-control.component';
-import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { GameScienceCalculatorComponent } from './components/game-science-calculator/game-science-calculator.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     RunningGameComponent,
     UserHeaderComponent,
     GameFormControlComponent,
+    GameScienceCalculatorComponent,
   ],
   imports: [
     CommonModule,
@@ -27,6 +30,8 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     SharedModule,
     ReactiveFormsModule,
     FontAwesomeModule,
+    MatDialogModule,
   ],
+  entryComponents: [GameScienceCalculatorComponent],
 })
 export class GameModule {}

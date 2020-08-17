@@ -1,5 +1,19 @@
-import {Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-game-form-control',
@@ -9,11 +23,12 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/for
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => GameFormControlComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class GameFormControlComponent implements ControlValueAccessor, OnChanges {
+export class GameFormControlComponent
+  implements ControlValueAccessor, OnChanges {
   @Input()
   formControl: FormControl;
 
@@ -26,13 +41,18 @@ export class GameFormControlComponent implements ControlValueAccessor, OnChanges
   @Input()
   color: string;
 
+  @Output()
+  blur: EventEmitter<string> = new EventEmitter<string>();
+
+  @Output()
+  focus: EventEmitter<string> = new EventEmitter<string>();
+
   input: string;
 
   inputGroupClasses: string[] = ['input-group-text'];
   classes: string[] = ['form-control'];
 
-
-  constructor() { }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.color) {
@@ -43,8 +63,18 @@ export class GameFormControlComponent implements ControlValueAccessor, OnChanges
     }
   }
 
-  onChange: any = () => {}
-  onTouch: any = () => {}
+  onChange: any = () => {};
+
+  onTouch: any = (s) => {};
+
+  onBlur(): void {
+    this.blur.emit(this.formControl.value);
+  }
+
+  onFocus(): void {
+    this.focus.emit(this.formControl.value);
+  }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -55,5 +85,4 @@ export class GameFormControlComponent implements ControlValueAccessor, OnChanges
   writeValue(input: string): void {
     this.input = input;
   }
-
 }

@@ -4,7 +4,7 @@
       <img src="{{imageUrl}}" *ngIf="imageUrl" alt="{{placeholder}}" />
     </div>
   </div>
-  <input type="number" [ngClass]="classes" placeholder="{{placeholder}}" [(ngModel)]="input"
+  <input [ngClass]="classes" placeholder="{{placeholder}}" [(ngModel)]="input"
          (ngModelChange)="onChange($event)"
-         (blur)="onTouch()">
+         (blur)="onBlur()" (focusin)="onFocus()">
 </div>

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Observable, Subscription } from 'rxjs';
+import { EMPTY, Observable, Subscription } from 'rxjs';
 import { User } from '../../../../core/models/User';
 import { environment } from '../../../../../environments/environment';
 import { debounceTime, delay, retryWhen, switchMap, tap } from 'rxjs/operators';
@@ -134,6 +134,11 @@ export class RunningGameComponent implements OnInit, OnChanges {
             debounceTime(1000),
             switchMap((value: string) => {
               this.formUpdating[key] = true;
+              value = '' + value;
+              if (value.includes('+')) {
+                return EMPTY;
+              }
+
               return this.gameWebSocket.updatePoint(
                 this.currentGame.id,
                 this.user.id,
@@ -158,7 +163,6 @@ export class RunningGameComponent implements OnInit, OnChanges {
       next: (message) => {
         const points = message.points;
         points.forEach((point) => {
-          console.log(this.form.controls);
           this.form.controls[keys[point.type - 1]].setValue(point.value);
         });
         this.recountTotal();
@@ -174,5 +178,48 @@ export class RunningGameComponent implements OnInit, OnChanges {
 
   onFinishGameMessage(message): void {
     this.finished.emit(this.currentGame.id);
+  }
+
+  onInputFocus(value, pointType): void {
+    value = '' + value;
+
+    if (value.includes('=')) {
+      const newValue = value.slice(0, value.indexOf('='));
+      const control = this.formControls[pointType] as FormControl;
+      control.setValue(newValue, {
+        emitEvent: false,
+        emitViewToModelChange: false,
+      });
+    }
+  }
+
+  onInputBlurred(value, pointType): void {
+    value = '' + value;
+    if (value.includes('+')) {
+      value = value.replace(/\s/g, '');
+      if (value.includes('=')) {
+        value = value.slice(0, value.indexOf('='));
+      }
+      const values = value.split('+');
+      const points = values.map((v) => +v).reduce((a, b) => a + b);
+
+      const type = Object.keys(this.formControls).indexOf(pointType);
+
+      this.gameWebSocket
+        .updatePoint(this.currentGame.id, this.user.id, type + 1, points)
+        .subscribe({
+          next: (message) => {
+            const control = this.formControls[pointType] as FormControl;
+            const newValue = `${control.value}=${points}`;
+            control.setValue(newValue, {
+              emitEvent: false,
+              emitViewToModelChange: false,
+            });
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+    }
   }
 }

@@ -4,37 +4,37 @@
       <form [formGroup]="form">
         <div class="row">
           <div class="col">
-            <app-game-form-control [formControl]="formControls.military" placeholder="Punkty za wojsko" color="military"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.military" placeholder="Punkty za wojsko" color="military" (blur)="onInputBlurred($event, 'military')" (focus)="onInputFocus($event, 'military')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <app-game-form-control imageUrl="/assets/images/form-icons/coins.png" placeholder="Punkty za pieniądze" color="image" [formControl]="formControls.coins"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.coins" placeholder="Punkty za pieniądze" color="image" imageUrl="/assets/images/form-icons/coins.png" (blur)="onInputBlurred($event, 'coins')" (focus)="onInputFocus($event, 'coins')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <app-game-form-control imageUrl="/assets/images/form-icons/stage.png" placeholder="Punkty za cuda świata" color="image" [formControl]="formControls.wonders"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.wonders" placeholder="Punkty za cuda świata" color="image" imageUrl="/assets/images/form-icons/stage.png" (blur)="onInputBlurred($event, 'wonders')" (focus)="onInputFocus($event, 'wonders')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <app-game-form-control placeholder="Punkty za kulturę" color="culture" [formControl]="formControls.culture"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.culture" placeholder="Punkty za kulturę" color="culture" (blur)="onInputBlurred($event, 'culture')" (focus)="onInputFocus($event, 'culture')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <app-game-form-control placeholder="Punkty za handel" color="trade" [formControl]="formControls.trade"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.trade" placeholder="Punkty za handel" color="trade" (blur)="onInputBlurred($event, 'trade')" (focus)="onInputFocus($event, 'trade')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <app-game-form-control placeholder="Punkty za gildie" color="guild" [formControl]="formControls.guild"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.guild" placeholder="Punkty za gildie" color="guild" (blur)="onInputBlurred($event, 'guild')" (focus)="onInputFocus($event, 'guild')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2 align-items-center">
           <div class="col">
-            <app-game-form-control placeholder="Punkty za naukę" color="science" [formControl]="formControls.science"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.science" placeholder="Punkty za naukę" color="science" (blur)="onInputBlurred($event, 'science')" (focus)="onInputFocus($event, 'science')"></app-game-form-control>
           </div>
           <div class="col-auto">
             <button class="btn btn-sm btn-success">XD</button>
@@ -42,12 +42,12 @@
         </div>
         <div class="row mt-2">
           <div class="col">
-            <app-game-form-control placeholder="Punkty za miasta" color="cities" [formControl]="formControls.cities"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.cities" placeholder="Punkty za miasta" color="cities" (blur)="onInputBlurred($event, 'cities')" (focus)="onInputFocus($event, 'cities')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">
           <div class="col">
-            <app-game-form-control placeholder="Punkty za liderów" imageUrl="/assets/images/form-icons/leader.png" color="image" [formControl]="formControls.leaders"></app-game-form-control>
+            <app-game-form-control [formControl]="formControls.leaders" placeholder="Punkty za liderów" color="image" imageUrl="/assets/images/form-icons/leader.png" (blur)="onInputBlurred($event, 'leaders')" (focus)="onInputFocus($event, 'leaders')"></app-game-form-control>
           </div>
         </div>
         <div class="row mt-2">

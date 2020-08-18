@@ -15,6 +15,7 @@ import { ErrorComponent } from './error.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SpinnerOverlayService } from './core/services/spinner-overlay.service';
 import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 registerLocaleData(localePl, localePlExtra);
 @NgModule({
@@ -26,6 +27,7 @@ registerLocaleData(localePl, localePlExtra);
     HttpClientModule,
     FontAwesomeModule,
     SharedModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     {

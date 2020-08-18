@@ -12,9 +12,22 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { EMPTY, Observable, Subscription } from 'rxjs';
 import { User } from '../../../../core/models/User';
 import { environment } from '../../../../../environments/environment';
-import { debounceTime, delay, retryWhen, switchMap, tap } from 'rxjs/operators';
+import {
+  debounceTime,
+  delay,
+  filter,
+  retryWhen,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { GameWebSocket } from '../../../../core/GameWebSocket';
 import { Game } from '../../../../core/models/Game';
+import { MatDialog } from '@angular/material/dialog';
+import { GameScienceCalculatorComponent } from '../game-science-calculator/game-science-calculator.component';
+import {
+  faCalculator,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-running-game',
@@ -42,6 +55,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
   gameWebSocket: GameWebSocket;
   subscriptions: Subscription[] = [];
   gameId: number;
+  faCalculator: IconDefinition = faCalculator;
 
   @Input()
   hasLeft: Observable<boolean>;
@@ -68,9 +82,11 @@ export class RunningGameComponent implements OnInit, OnChanges {
 
   pointsLoaded = false;
 
-  constructor() {}
+  constructor(private matDialog: MatDialog) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.calculateScience();
+  }
 
   private closeGameWebSocket(): void {
     if (this.gameWebSocket) {
@@ -172,6 +188,18 @@ export class RunningGameComponent implements OnInit, OnChanges {
         console.log(err);
       },
     });
+  }
+
+  calculateScience(): void {
+    const dialog = this.matDialog.open(GameScienceCalculatorComponent, {});
+
+    dialog
+      .afterClosed()
+      .pipe(filter((x) => x))
+      .subscribe((d) => {
+        this.formControls.science.setValue(d);
+        this.onInputBlurred(d, 'science');
+      });
   }
 
   onGameInfoMessage(message): void {}

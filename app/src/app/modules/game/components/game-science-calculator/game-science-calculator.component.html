@@ -1,0 +1,52 @@
+<div id="game-science-calculator">
+  <form [formGroup]="form">
+  <h1>Twoje symbole</h1>
+  <section class="point-inputs">
+    <div class="symbol-group">
+      <img src="/assets/images/form-icons/tablet.png" class="symbol">
+      <input type="number" class="form-control form-control-sm" formControlName="ownTablet">
+    </div>
+    <div class="symbol-group">
+      <img src="/assets/images/form-icons/gear.png" class="symbol">
+      <input type="number" class="form-control form-control-sm" formControlName="ownGear">
+    </div>
+    <div class="symbol-group">
+      <img src="/assets/images/form-icons/compass.png" class="symbol">
+      <input type="number" class="form-control form-control-sm" formControlName="ownCompass">
+    </div>
+  </section>
+  <h1>Kradzież</h1>
+  <p class="desc">Wpisz w pierwsze pole liczbę kart kradzieży w Twoim mieście, a następnie wpisz liczbę poszczególnych symboli u sąsiadów</p>
+  <section class="point-inputs">
+    <div class="symbol-group">
+      <input class="form-control form-control-sm" formControlName="ownThieves">
+    </div>
+    <div class="symbol-group">
+      <img src="/assets/images/form-icons/tablet.png" class="symbol">
+      <input class="form-control form-control-sm" formControlName="tabletToSteal">
+    </div>
+    <div class="symbol-group">
+      <img src="/assets/images/form-icons/gear.png" class="symbol">
+      <input class="form-control form-control-sm" formControlName="gearToSteal">
+    </div>
+    <div class="symbol-group">
+      <img src="/assets/images/form-icons/compass.png" class="symbol">
+      <input class="form-control form-control-sm" formControlName="compassToSteal">
+    </div>
+  </section>
+  <h1>Profitujący z posiadanych</h1>
+  <p class="desc">W pierwsze pole wpisz liczbę kart dodających symbole, których masz najwięcej, a w drugie liczbę dowolnych symboli</p>
+  <section class="point-inputs">
+    <div class="symbol-group">
+      <input class="form-control form-control-sm" formControlName="maxSymbols">
+    </div>
+    <div class="symbol-group">
+      <input class="form-control form-control-sm" formControlName="randomSymbols">
+    </div>
+  </section>
+  </form>
+  <div class="buttons">
+    <button class="btn btn-outline-success btn-sm" (click)="onSave()">Zapisz</button>
+    <button class="btn btn-outline-danger btn-sm" (click)="dialogRef.close()">Anuluj</button>
+  </div>
+</div>

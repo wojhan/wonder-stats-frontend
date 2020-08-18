@@ -13,6 +13,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Game } from '../../../../core/models/Game';
 import { environment } from '../../../../../environments/environment';
 import { GameWebSocket } from '../../../../core/GameWebSocket';
+import { WebsocketService } from '../../../../core/services/websocket.service';
 
 @Component({
   selector: 'app-game-stats',
@@ -38,7 +39,11 @@ export class GameStatsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.game) {
       if (!this.gameWebSocket) {
-        this.gameWebSocket = new GameWebSocket(this.game.id, this as Component);
+        this.gameWebSocket = new GameWebSocket(
+          this.game.id,
+          this as Component,
+          true
+        );
       }
       this.columns = [];
       this.columns = this.game.players.map((player) => ({
@@ -72,6 +77,9 @@ export class GameStatsComponent implements OnInit, OnChanges {
           },
           error: (err) => {
             console.log(err);
+            WebsocketService.routerInstance.navigate(['/error'], {
+              queryParams: { backUrl: '/manage' },
+            });
           },
         });
       });
@@ -106,7 +114,11 @@ export class GameStatsComponent implements OnInit, OnChanges {
         this.game = null;
         this.endGame.emit(true);
       },
-      error: (err) => {},
+      error: (err) => {
+        WebsocketService.routerInstance.navigate(['/error'], {
+          queryParams: { backUrl: '/manage' },
+        });
+      },
     });
   }
 }

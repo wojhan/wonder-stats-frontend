@@ -18,7 +18,7 @@ export class StatsPage implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.lobbyWebSocket = new LobbyWebSocket(this as Component);
+    this.lobbyWebSocket = new LobbyWebSocket(this as Component, true);
   }
 
   onGameInfoMessage(message): void {

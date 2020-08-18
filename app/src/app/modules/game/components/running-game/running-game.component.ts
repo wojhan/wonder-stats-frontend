@@ -28,6 +28,7 @@ import {
   faCalculator,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
+import { WebsocketService } from '../../../../core/services/websocket.service';
 
 @Component({
   selector: 'app-running-game',
@@ -170,6 +171,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
             },
             error: (err) => {
               console.log(err);
+              WebsocketService.instance.router.navigate(['/error']);
             },
           })
       );
@@ -186,6 +188,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
       },
       error: (err) => {
         console.log(err);
+        WebsocketService.instance.router.navigate(['/error']);
       },
     });
   }
@@ -246,6 +249,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
           },
           error: (err) => {
             console.log(err);
+            WebsocketService.instance.router.navigate(['/error']);
           },
         });
     }

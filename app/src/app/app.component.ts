@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SpinnerOverlayService } from './core/services/spinner-overlay.service';
+import { WebsocketService } from './core/services/websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,8 @@ import { SpinnerOverlayService } from './core/services/spinner-overlay.service';
 export class AppComponent {
   title = 'wonder-stats-frontend';
 
-  constructor(private spinner: SpinnerOverlayService) {}
+  constructor(
+    private spinner: SpinnerOverlayService,
+    private websocketService: WebsocketService
+  ) {}
 }

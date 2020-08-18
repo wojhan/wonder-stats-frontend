@@ -17,6 +17,7 @@ import { WebSocketI } from './WebSocketI';
 import { getRandomHash } from './utils';
 import { SpinnerOverlayService } from './services/spinner-overlay.service';
 import { retryPipe } from './pipes/websocket.pipes';
+import { WebsocketService } from './services/websocket.service';
 
 export class LobbyWebSocket implements WebSocketI {
   appComponent: any;
@@ -26,12 +27,14 @@ export class LobbyWebSocket implements WebSocketI {
   url = environment.wsUrl + 'ws/game-lobby/';
 
   messages = 0;
+  statsComponent: boolean;
 
   spinner: SpinnerOverlayService;
 
-  constructor(appComponent: Component) {
+  constructor(appComponent: Component, statsComponent: boolean = false) {
     this.spinner = SpinnerOverlayService.instance;
     this.appComponent = appComponent;
+    this.statsComponent = statsComponent;
     this.webSocketSubject = webSocket(this.url);
     this.webSocketListener = this.webSocketSubject.asObservable();
 
@@ -74,9 +77,19 @@ export class LobbyWebSocket implements WebSocketI {
 
   onComplete(): void {}
 
-  onError(error): void {}
+  onError(error): void {
+    const options = {
+      backUrl: '/manage',
+    };
+
+    WebsocketService.instance.router.navigate(
+      ['/error'],
+      this.statsComponent ? { queryParams: options } : {}
+    );
+  }
 
   close(): void {
+    this.spinner.hide();
     this.webSocketSubscription.unsubscribe();
   }
 

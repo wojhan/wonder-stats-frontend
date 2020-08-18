@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { LobbyWebSocket } from '../../../../core/LobbyWebSocket';
 import { Game } from '../../../../core/models/Game';
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-game',
   templateUrl: './game.page.html',
 })
-export class GamePage implements OnInit {
+export class GamePage implements OnInit, OnDestroy {
   lobbyWebSocket: LobbyWebSocket;
 
   currentGame: Game;
@@ -26,7 +26,14 @@ export class GamePage implements OnInit {
 
   ngOnInit(): void {
     this.user = this.route.snapshot.data.user;
+    if (!this.user) {
+      this.router.navigate(['/auth', 'login']);
+    }
     this.initWebSocket();
+  }
+
+  ngOnDestroy(): void {
+    this.lobbyWebSocket.close();
   }
 
   initWebSocket(): void {

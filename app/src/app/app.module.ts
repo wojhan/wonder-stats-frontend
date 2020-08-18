@@ -16,6 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SpinnerOverlayService } from './core/services/spinner-overlay.service';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { WebsocketService } from './core/services/websocket.service';
 
 registerLocaleData(localePl, localePlExtra);
 @NgModule({
@@ -36,6 +37,7 @@ registerLocaleData(localePl, localePlExtra);
       multi: true,
     },
     UserService,
+    WebsocketService,
   ],
   bootstrap: [AppComponent],
 })

@@ -4,9 +4,10 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { User } from '../models/User';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UserResolve implements Resolve<User> {
@@ -15,6 +16,8 @@ export class UserResolve implements Resolve<User> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<User> {
-    return this.userService.getUser(+localStorage.getItem('user-id'));
+    return this.userService
+      .getUser(+localStorage.getItem('user-id'))
+      .pipe(catchError((err) => of(null)));
   }
 }

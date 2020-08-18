@@ -15,6 +15,7 @@ import { getRandomHash } from './utils';
 import { WebSocketI } from './WebSocketI';
 import { SpinnerOverlayService } from './services/spinner-overlay.service';
 import { retryPipe } from './pipes/websocket.pipes';
+import { WebsocketService } from './services/websocket.service';
 
 export class GameWebSocket implements WebSocketI {
   appComponent: Component;
@@ -28,7 +29,11 @@ export class GameWebSocket implements WebSocketI {
 
   messages = 0;
 
-  constructor(gameId: number, appComponent: Component) {
+  constructor(
+    gameId: number,
+    appComponent: Component,
+    statsComponent: boolean = false
+  ) {
     this.spinner = SpinnerOverlayService.instance;
     this.appComponent = appComponent;
     this.gameId = gameId;
@@ -46,6 +51,7 @@ export class GameWebSocket implements WebSocketI {
         },
         error: (err) => {
           console.log(err);
+          WebsocketService.instance.router.navigate(['/error']);
           this.onError(err);
         },
       });

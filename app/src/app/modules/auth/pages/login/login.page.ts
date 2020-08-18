@@ -16,6 +16,9 @@ export class LoginPage implements OnInit {
       next: (users: User[]) => {
         this.users = users;
       },
+      error: (err) => {
+        this.router.navigate(['/error']);
+      },
     });
   }
 

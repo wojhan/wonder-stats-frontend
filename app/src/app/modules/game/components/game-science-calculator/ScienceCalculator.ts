@@ -23,7 +23,7 @@ export class ScienceCalculator {
 
   public getMaxSymbol(): string {
     const symbolNames = ['tablet', 'gear', 'compass'];
-    const symbols = [this.ownTablets, this.ownGears, this.ownCompasses];
+    const symbols = [this.tablets, this.gears, this.compasses];
     const max = Math.max(...symbols);
     const index = symbols.indexOf(max);
 

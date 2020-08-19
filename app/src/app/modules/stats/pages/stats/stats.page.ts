@@ -25,6 +25,9 @@ export class StatsPage implements OnInit {
     this.game = message.game;
     if (this.game) {
       this.game.players.forEach((player) => {
+        if (!player.avatar.includes('api/media')) {
+          player.avatar = '/api/media/' + player.avatar;
+        }
         if (!player.avatar.includes('http')) {
           player.avatar =
             environment.apiUrl.slice(0, environment.apiUrl.length - 1) +

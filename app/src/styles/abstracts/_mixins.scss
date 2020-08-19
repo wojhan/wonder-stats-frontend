@@ -1,5 +1,5 @@
-$color-based-types: 'military', 'culture', 'trade', 'guild', 'science', 'cities', 'image';
-$colors: $stats-red-color, $stats-blue-color,$stats-yellow-color,$stats-purple-color,$stats-green-color,$stats-black-color, $stats-white-color;
+$color-based-types: 'military', 'culture', 'trade', 'guild', 'science', 'cities', 'image', 'shipyard', 'islands';
+$colors: $stats-red-color, $stats-blue-color,$stats-yellow-color,$stats-purple-color,$stats-green-color,$stats-black-color, $stats-white-color, $stats-aqua-color, $stats-lime-color;
 
 @mixin point-type-list($attr, $custom-name: '', $is-class: true, $opacity: 1) {
   $attr-list: null;

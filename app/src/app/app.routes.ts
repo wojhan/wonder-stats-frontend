@@ -18,5 +18,6 @@ export const AppRoutes: Routes = [
       import('./modules/stats/stats.module').then((m) => m.StatsModule),
   },
   { path: 'error', component: ErrorComponent },
+  { path: '**', redirectTo: '/game', pathMatch: 'full' },
   // { path: 'auth', loadChildren: () => import(‘./modules/auth/auth.module’).then(m => m.UserModule)}; },
 ];

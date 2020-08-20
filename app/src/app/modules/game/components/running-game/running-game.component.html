@@ -1,70 +1,22 @@
-<div id="available-games" class="w-100">
+<div id="available-games" class="w-100" *ngIf="gameLoaded; else loading">
   <div class="card">
     <div class="card-body">
       <form [formGroup]="form">
-        <div class="row">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.military" placeholder="Punkty za wojsko" color="military" (blur)="onInputBlurred($event, 'military')" (focus)="onInputFocus($event, 'military')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.coins" placeholder="Punkty za pieniądze" color="image" imageUrl="/assets/images/form-icons/coins.png" (blur)="onInputBlurred($event, 'coins')" (focus)="onInputFocus($event, 'coins')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.wonders" placeholder="Punkty za cuda świata" color="image" imageUrl="/assets/images/form-icons/stage.png" (blur)="onInputBlurred($event, 'wonders')" (focus)="onInputFocus($event, 'wonders')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.culture" placeholder="Punkty za kulturę" color="culture" (blur)="onInputBlurred($event, 'culture')" (focus)="onInputFocus($event, 'culture')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.trade" placeholder="Punkty za handel" color="trade" (blur)="onInputBlurred($event, 'trade')" (focus)="onInputFocus($event, 'trade')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.guild" placeholder="Punkty za gildie" color="guild" (blur)="onInputBlurred($event, 'guild')" (focus)="onInputFocus($event, 'guild')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2 align-items-center">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.science" placeholder="Punkty za naukę" color="science" (blur)="onInputBlurred($event, 'science')" (focus)="onInputFocus($event, 'science')"></app-game-form-control>
-          </div>
-          <div class="col-auto">
-            <button class="btn btn-sm btn-success" (click)="calculateScience()"><fa-icon [icon]="faCalculator"></fa-icon> </button>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.cities" placeholder="Punkty za miasta" color="cities" (blur)="onInputBlurred($event, 'cities')" (focus)="onInputFocus($event, 'cities')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.leaders" placeholder="Punkty za liderów" color="image" imageUrl="/assets/images/form-icons/leader.png" (blur)="onInputBlurred($event, 'leaders')" (focus)="onInputFocus($event, 'leaders')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.shipyard" placeholder="Punkty za stocznię" color="shipyard" (blur)="onInputBlurred($event, 'shipyard')" (focus)="onInputFocus($event, 'shipyard')"></app-game-form-control>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col">
-            <app-game-form-control [formControl]="formControls.islands" placeholder="Punkty za wyspy" color="islands" (blur)="onInputBlurred($event, 'islands')" (focus)="onInputFocus($event, 'islands')"></app-game-form-control>
-          </div>
-        </div>
+            <app-game-form-control  *ngFor="let component of gameComponents" [formControl]="component.formControl"
+                                   placeholder="{{component.placeholder}}" color="{{component.colorClass}}"
+                                   imageUrl="{{component.imageUrl}}"
+                                   pointType="{{component.pointType}}" (pointUpdate)="onPointChange($event)">
+              <ng-container *ngIf="component.pointType === 7">
+                <div class="col-auto">
+                  <button class="btn btn-sm btn-success" (click)="calculateScience()"><fa-icon [icon]="faCalculator"></fa-icon> </button>
+                </div>
+              </ng-container>
+            </app-game-form-control>
         <div class="row mt-2">
           <div class="col">
             <div class="game-form-control input-group">
               <div class="input-group-prepend">
-                <div class="input-group-text white">
+                <div class="input-group-text white d-flex justify-content-center">
                   ∑
                 </div>
               </div>
@@ -76,3 +28,12 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #loading>
+  <div class="card">
+    <div class="card-body d-flex justify-content-center align-items-center">
+      <app-lds-roller></app-lds-roller>
+    </div>
+  </div>
+</ng-template>

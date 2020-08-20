@@ -22,7 +22,7 @@ export class SpinnerOverlayService {
     return new SpinnerOverlayService(SpinnerOverlayService.overlayInstance);
   }
 
-  public show(message = '') {
+  public show(message = ''): void {
     // Returns an OverlayRef (which is a PortalHost)
 
     if (this.shown) {
@@ -40,7 +40,7 @@ export class SpinnerOverlayService {
     this.shown = true;
   }
 
-  public hide() {
+  public hide(): void {
     if (!this.shown) {
       return;
     }

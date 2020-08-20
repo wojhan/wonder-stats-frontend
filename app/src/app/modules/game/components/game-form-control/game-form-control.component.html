@@ -1,10 +1,15 @@
-<div class="game-form-control input-group">
-  <div class="input-group-prepend">
-    <div [ngClass]="inputGroupClasses">
-      <img src="{{imageUrl}}" *ngIf="imageUrl" alt="{{placeholder}}" />
+<div class="row mb-2 align-items-center d-flex">
+  <div class="col">
+    <div class="game-form-control input-group">
+      <div class="input-group-prepend">
+        <div [ngClass]="inputGroupClasses">
+          <img src="{{imageUrl}}" *ngIf="imageUrl" alt="{{placeholder}}" />
+        </div>
+      </div>
+      <input [ngClass]="classes" placeholder="{{placeholder}}" [(ngModel)]="input"
+             (ngModelChange)="onChange($event)"
+             (blur)="onBlur()" (focusin)="onFocus()">
     </div>
   </div>
-  <input [ngClass]="classes" placeholder="{{placeholder}}" [(ngModel)]="input"
-         (ngModelChange)="onChange($event)"
-         (blur)="onBlur()" (focusin)="onFocus()">
+  <ng-content></ng-content>
 </div>

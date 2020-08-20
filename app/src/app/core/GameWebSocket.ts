@@ -7,6 +7,7 @@ import {
   concatMap,
   delay,
   filter,
+  map,
   retryWhen,
   take,
   timeout,
@@ -16,6 +17,9 @@ import { WebSocketI } from './WebSocketI';
 import { SpinnerOverlayService } from './services/spinner-overlay.service';
 import { retryPipe } from './pipes/websocket.pipes';
 import { WebsocketService } from './services/websocket.service';
+import { PointsUpdateMessage } from '@wonder/core/models/websocket/PointsUpdateMessage';
+import { Point } from '@wonder/core/models/Point';
+import { PointType } from '@wonder/core/models/point-type';
 
 export class GameWebSocket implements WebSocketI {
   appComponent: Component;
@@ -143,10 +147,18 @@ export class GameWebSocket implements WebSocketI {
 
     return this.webSocketListener.pipe(
       filter(
-        (message) =>
+        (message: PointsUpdateMessage) =>
           message.message_type === 'get_points_response' &&
           message.sender === sender
       ),
+      map((message: PointsUpdateMessage) => {
+        const keys = Object.keys(PointType);
+        message.points = message.points.map((point: Point) => {
+          point.type = PointType[keys[+point.type - 1]];
+          return point;
+        });
+        return message;
+      }),
       take(1),
       timeout(5000)
     );

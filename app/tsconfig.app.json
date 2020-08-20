@@ -3,7 +3,13 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [],
+    "baseUrl": "src/",
+    "paths": {
+      "@wonder/core/*": ["./app/core/*"],
+      "@wonder/modules/*": ["./app/modules/*"],
+      "@wonder/shared/*": ["./app/shared/*"]
+    }
   },
   "files": [
     "src/main.ts",
@@ -11,5 +17,8 @@
   ],
   "include": [
     "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts"
   ]
 }

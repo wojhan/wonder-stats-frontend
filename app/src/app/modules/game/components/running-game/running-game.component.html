@@ -52,6 +52,16 @@
         </div>
         <div class="row mt-2">
           <div class="col">
+            <app-game-form-control [formControl]="formControls.shipyard" placeholder="Punkty za stocznię" color="shipyard" (blur)="onInputBlurred($event, 'shipyard')" (focus)="onInputFocus($event, 'shipyard')"></app-game-form-control>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <app-game-form-control [formControl]="formControls.islands" placeholder="Punkty za wyspy" color="islands" (blur)="onInputBlurred($event, 'islands')" (focus)="onInputFocus($event, 'islands')"></app-game-form-control>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
             <div class="game-form-control input-group">
               <div class="input-group-prepend">
                 <div class="input-group-text white">

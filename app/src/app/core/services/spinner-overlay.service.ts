@@ -2,10 +2,12 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { SpinnerOverlayComponent } from '../../shared/components/spinner-overlay/spinner-overlay.component';
+import { getRandomHash } from '../utils';
 
 @Injectable()
 export class SpinnerOverlayService {
   static instance;
+  static overlayInstance;
 
   shown = false;
 
@@ -13,7 +15,11 @@ export class SpinnerOverlayService {
 
   constructor(private overlay: Overlay) {
     SpinnerOverlayService.instance = this;
-    console.log('test');
+    SpinnerOverlayService.overlayInstance = overlay;
+  }
+
+  public static create(): SpinnerOverlayService {
+    return new SpinnerOverlayService(SpinnerOverlayService.overlayInstance);
   }
 
   public show(message = '') {

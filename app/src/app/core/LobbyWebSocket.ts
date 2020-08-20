@@ -32,7 +32,7 @@ export class LobbyWebSocket implements WebSocketI {
   spinner: SpinnerOverlayService;
 
   constructor(appComponent: Component, statsComponent: boolean = false) {
-    this.spinner = SpinnerOverlayService.instance;
+    this.spinner = SpinnerOverlayService.create();
     this.appComponent = appComponent;
     this.statsComponent = statsComponent;
     this.webSocketSubject = webSocket(this.url);

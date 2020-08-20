@@ -10,5 +10,7 @@ $stats-blue-color: #3f3ef8;
 $stats-green-color: #3aa939;
 $stats-yellow-color: #fffe54;
 $stats-black-color: #2d2d2d;
+$stats-aqua-color: lighten($stats-blue-color, 20);
+$stats-lime-color: lighten($stats-green-color, 40);
 
 $stats-cell-opacity: 0.2;

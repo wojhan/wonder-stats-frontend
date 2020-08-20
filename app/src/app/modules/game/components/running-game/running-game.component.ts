@@ -51,6 +51,8 @@ export class RunningGameComponent implements OnInit, OnChanges {
     science: new FormControl(null),
     cities: new FormControl(null),
     leaders: new FormControl(null),
+    shipyard: new FormControl(null),
+    islands: new FormControl(null),
   };
   form: FormGroup = new FormGroup(this.formControls);
   gameWebSocket: GameWebSocket;
@@ -82,6 +84,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
   total = 0;
 
   pointsLoaded = false;
+  gameChanged = false;
 
   constructor(private matDialog: MatDialog) {}
 
@@ -97,10 +100,20 @@ export class RunningGameComponent implements OnInit, OnChanges {
   }
 
   private recountTotal(): void {
-    this.total = Object.keys(this.form.value).reduce(
-      (sum, key) => sum + parseFloat(this.form.get(key).value || 0),
-      0
-    );
+    this.total = Object.keys(this.form.value).reduce((sum, key) => {
+      let value = '' + this.form.get(key).value;
+      if (value.includes('+')) {
+        value = value.replace(/\s/g, '');
+        if (value.includes('=')) {
+          value = value.slice(0, value.indexOf('='));
+        }
+        const values = value.split('+');
+        const points = values.map((v) => +v).reduce((a, b) => a + b);
+        return sum + points;
+      } else {
+        return sum + parseFloat(this.form.get(key).value || 0);
+      }
+    }, 0);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -110,11 +123,13 @@ export class RunningGameComponent implements OnInit, OnChanges {
       });
     }
     this.subscriptions = [];
-
-    if (changes.game) {
-      const game: Game = changes.game.currentValue;
-      if (changes.game.currentValue.id !== this.gameId) {
+    console.log(changes);
+    if (changes.currentGame) {
+      const game: Game = changes.currentGame.currentValue;
+      console.log(game.id, this.gameId);
+      if (game.id !== this.gameId) {
         this.gameId = game.id;
+        this.gameChanged = true;
         this.closeGameWebSocket();
       }
     }
@@ -130,6 +145,8 @@ export class RunningGameComponent implements OnInit, OnChanges {
         science: new FormControl(null),
         cities: new FormControl(null),
         leaders: new FormControl(null),
+        shipyard: new FormControl(null),
+        islands: new FormControl(null),
       };
       this.form = new FormGroup(this.formControls);
     }
@@ -177,20 +194,26 @@ export class RunningGameComponent implements OnInit, OnChanges {
       );
     });
 
-    this.gameWebSocket.getPoints(this.currentGame.id, this.user.id).subscribe({
-      next: (message) => {
-        const points = message.points;
-        points.forEach((point) => {
-          this.form.controls[keys[point.type - 1]].setValue(point.value);
+    console.log(this.gameChanged);
+    if (this.gameChanged) {
+      this.gameWebSocket
+        .getPoints(this.currentGame.id, this.user.id)
+        .subscribe({
+          next: (message) => {
+            const points = message.points;
+            points.forEach((point) => {
+              this.form.controls[keys[point.type - 1]].setValue(point.value);
+            });
+            this.recountTotal();
+            this.pointsLoaded = true;
+          },
+          error: (err) => {
+            console.log(err);
+            WebsocketService.instance.router.navigate(['/error']);
+          },
         });
-        this.recountTotal();
-        this.pointsLoaded = true;
-      },
-      error: (err) => {
-        console.log(err);
-        WebsocketService.instance.router.navigate(['/error']);
-      },
-    });
+      this.gameChanged = false;
+    }
   }
 
   calculateScience(): void {
@@ -246,6 +269,7 @@ export class RunningGameComponent implements OnInit, OnChanges {
               emitEvent: false,
               emitViewToModelChange: false,
             });
+            this.recountTotal();
           },
           error: (err) => {
             console.log(err);

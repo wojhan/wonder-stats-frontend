@@ -52,6 +52,14 @@
           <td *ngFor="let column of columns; let i = index" class="stats-cell leader-cell">{{columns[i]?.points['leaders']}}</td>
         </tr>
         <tr>
+          <th scope="row" class="stats-header shipyard-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell leader-cell">{{columns[i]?.points['shipyard']}}</td>
+        </tr>
+        <tr>
+          <th scope="row" class="stats-header islands-header"></th>
+          <td *ngFor="let column of columns; let i = index" class="stats-cell leader-cell">{{columns[i]?.points['islands']}}</td>
+        </tr>
+        <tr>
           <th scope="row" class="stats-header"></th>
           <td *ngFor="let column of columns; let i = index">{{columns[i]?.sum}}</td>
         </tr>

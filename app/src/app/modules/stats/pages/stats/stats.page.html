@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       <app-game-stats *ngIf="game" [game]="game" (endGame)="onEndGame($event)"></app-game-stats>
-
+      <app-no-game *ngIf="!game" (gameCreated)="onGameCreated($event)"></app-no-game>
     </div>
   </div>
 </section>

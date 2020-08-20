@@ -26,6 +26,7 @@ export class GameWebSocket implements WebSocketI {
   url = environment.wsUrl + 'ws/game/';
 
   spinner: SpinnerOverlayService;
+  statsComponent: boolean;
 
   messages = 0;
 
@@ -34,8 +35,9 @@ export class GameWebSocket implements WebSocketI {
     appComponent: Component,
     statsComponent: boolean = false
   ) {
-    this.spinner = SpinnerOverlayService.instance;
+    this.spinner = SpinnerOverlayService.create();
     this.appComponent = appComponent;
+    this.statsComponent = statsComponent;
     this.gameId = gameId;
     this.webSocketSubject = webSocket(this.url + gameId + '/');
     this.webSocketListener = this.webSocketSubject.asObservable();
@@ -51,7 +53,13 @@ export class GameWebSocket implements WebSocketI {
         },
         error: (err) => {
           console.log(err);
-          WebsocketService.instance.router.navigate(['/error']);
+          const options = {
+            backUrl: '/manage',
+          };
+          WebsocketService.instance.router.navigate(
+            ['/error'],
+            this.statsComponent ? { queryParams: options } : {}
+          );
           this.onError(err);
         },
       });

@@ -64,6 +64,8 @@ export class GameStatsComponent implements OnInit, OnChanges {
               'science',
               'cities',
               'leaders',
+              'shipyard',
+              'islands',
             ];
             keys.forEach((key, index) => {
               column.points[key] = message.points.filter(

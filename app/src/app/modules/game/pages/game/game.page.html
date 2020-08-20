@@ -2,7 +2,7 @@
   <section id="user-header">
     <app-user-header [game]="currentGame" [inGame]="playerInGame" [user]="user" (leave)="onLeave($event)"></app-user-header>
   </section>
-  <section id="game-content">
+  <section id="game-content" *ngIf="currentGame !== undefined">
     <app-available-games *ngIf="!playerInGame" [currentGame]="currentGame" (joinClick)="onJoinClick($event)"></app-available-games>
     <app-running-game *ngIf="playerInGame && currentGame" [currentGame]="currentGame" [user]="user" (finished)="onFinished($event)"></app-running-game>
   </section>

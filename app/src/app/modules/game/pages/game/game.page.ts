@@ -5,6 +5,7 @@ import { Game } from '../../../../core/models/Game';
 import { User } from '../../../../core/models/User';
 import { UserService } from '../../../../core/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WebsocketService } from '../../../../core/services/websocket.service';
 
 @Component({
   selector: 'app-game',
@@ -47,6 +48,10 @@ export class GamePage implements OnInit, OnDestroy {
       message.game.players.forEach((player) => {
         if (this.user.id === player.id) {
           this.playerInGame = true;
+        }
+
+        if (!player.avatar.includes('/api/media')) {
+          player.avatar = '/api/media/' + player.avatar;
         }
 
         if (!player.avatar.includes('http')) {

@@ -13,6 +13,7 @@ import { GameFormControlComponent } from './components/game-form-control/game-fo
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GameScienceCalculatorComponent } from './components/game-science-calculator/game-science-calculator.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { GameFormService } from './services/game-form.service';
 
 @NgModule({
   declarations: [
@@ -33,5 +34,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule,
   ],
   entryComponents: [GameScienceCalculatorComponent],
+  providers: [GameFormService],
 })
 export class GameModule {}

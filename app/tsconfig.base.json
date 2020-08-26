@@ -2,7 +2,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "src/",
+    "paths": {
+      "@wonder/core/*": ["./app/core/*"],
+      "@wonder/modules/*": ["./app/modules/*"],
+      "@wonder/shared/*": ["./app/shared/*"]
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,

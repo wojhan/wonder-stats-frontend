@@ -5,7 +5,13 @@
     "outDir": "./out-tsc/spec",
     "types": [
       "jasmine"
-    ]
+    ],
+    "baseUrl": "src/",
+    "paths": {
+      "@wonder/core/*": ["./app/core/*"],
+      "@wonder/modules/*": ["./app/modules/*"],
+      "@wonder/shared/*": ["./app/shared/*"]
+    }
   },
   "files": [
     "src/test.ts",

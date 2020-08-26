@@ -2,10 +2,9 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  HostListener,
   Input,
   OnChanges,
-  OnInit,
+  OnDestroy,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -14,6 +13,13 @@ import {
   FormControl,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+
+import { of, Subscription } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
+
+import { GameFormService } from '@wonder/modules/game/services/game-form.service';
+import { PointUpdate } from '@wonder/core/models/PointUpdate';
+import { PointType } from '@wonder/core/models/point-type';
 
 @Component({
   selector: 'app-game-form-control',
@@ -28,33 +34,43 @@ import {
   ],
 })
 export class GameFormControlComponent
-  implements ControlValueAccessor, OnChanges {
-  @Input()
-  formControl: FormControl;
-
-  @Input()
-  placeholder: string;
-
-  @Input()
-  imageUrl: string;
-
-  @Input()
-  color: string;
+  implements ControlValueAccessor, OnChanges, OnDestroy {
+  @Input() formControl: FormControl;
+  @Input() placeholder: string;
+  @Input() imageUrl: string;
+  @Input() color: string;
+  @Input() pointType: PointType;
 
   @Output()
-  blur: EventEmitter<string> = new EventEmitter<string>();
+  pointUpdate: EventEmitter<PointUpdate> = new EventEmitter();
 
-  @Output()
-  focus: EventEmitter<string> = new EventEmitter<string>();
+  private debounceTime = 500;
+  private formControlSubscription: Subscription;
+  private oldValue: string;
 
-  input: string;
+  public input: string;
+  public inputGroupClasses: string[] = ['input-group-text'];
+  public classes: string[] = ['form-control'];
+  public onChange: any = () => {};
+  public onTouch: any = (s) => {};
 
-  inputGroupClasses: string[] = ['input-group-text'];
-  classes: string[] = ['form-control'];
-
-  constructor() {}
+  constructor(private gameFormService: GameFormService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    const formControlChange = changes.formControl;
+    if (formControlChange) {
+      this.oldValue = '' + this.formControl.value;
+      this.formControlSubscription = this.formControl.valueChanges
+        .pipe(
+          debounceTime(this.debounceTime),
+          switchMap((value) => {
+            this.onFormValueChange(value, 'change');
+            return of(value);
+          })
+        )
+        .subscribe();
+    }
+
     if (this.color) {
       this.classes = ['form-control'];
 
@@ -63,26 +79,62 @@ export class GameFormControlComponent
     }
   }
 
-  onChange: any = () => {};
-
-  onTouch: any = (s) => {};
-
-  onBlur(): void {
-    this.blur.emit(this.formControl.value);
+  ngOnDestroy(): void {
+    this.clearSubscriptions();
   }
 
-  onFocus(): void {
-    this.focus.emit(this.formControl.value);
+  private clearSubscriptions(): void {
+    if (this.formControlSubscription) {
+      this.formControlSubscription.unsubscribe();
+    }
   }
 
-  registerOnChange(fn: any): void {
+  private onFormValueChange(
+    value: string,
+    changeEvent: 'change' | 'blur'
+  ): void {
+    value = '' + value;
+
+    if (changeEvent === 'blur') {
+      this.gameFormService.removeEquation(this.formControl);
+    }
+
+    if (value === this.oldValue) {
+      return;
+    }
+
+    if (
+      changeEvent === 'change' &&
+      (this.gameFormService.hasEquation(value) ||
+        this.gameFormService.needsCalculate(value))
+    ) {
+      return;
+    }
+
+    this.oldValue = value;
+
+    this.pointUpdate.emit({
+      type: this.pointType,
+      value: this.gameFormService.getPointValue(this.formControl),
+    });
+  }
+
+  public onBlur(): void {
+    this.onFormValueChange(this.formControl.value, 'blur');
+  }
+
+  public onFocus(): void {
+    this.gameFormService.transformToEquation(this.formControl);
+  }
+
+  public registerOnChange(fn: any): void {
     this.onChange = fn;
   }
-  registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
 
-  writeValue(input: string): void {
+  public writeValue(input: string): void {
     this.input = input;
   }
 }

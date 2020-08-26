@@ -3,93 +3,94 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { EMPTY, Observable, Subscription } from 'rxjs';
-import { User } from '../../../../core/models/User';
-import { environment } from '../../../../../environments/environment';
-import {
-  debounceTime,
-  delay,
-  filter,
-  retryWhen,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
-import { GameWebSocket } from '../../../../core/GameWebSocket';
-import { Game } from '../../../../core/models/Game';
 import { MatDialog } from '@angular/material/dialog';
-import { GameScienceCalculatorComponent } from '../game-science-calculator/game-science-calculator.component';
+
 import {
   faCalculator,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { WebsocketService } from '../../../../core/services/websocket.service';
+import { PartialObserver } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
+import { GameWebSocket } from '@wonder/core/GameWebSocket';
+import { User } from '@wonder/core/models/User';
+import { WebsocketService } from '@wonder/core/services/websocket.service';
+import { calculateControlValue } from '@wonder/core/utils';
+import { GameScienceCalculatorComponent } from '../game-science-calculator/game-science-calculator.component';
+import { Game } from '@wonder/core/models/Game';
+import { GameService } from '@wonder/core/services/game.service';
+import { Point } from '@wonder/core/models/Point';
+import { GameMessageReceiver } from '@wonder/core/models/websocket/GameMessageReceiver';
+import { PointUpdateMessage } from '@wonder/core/models/websocket/PointUpdateMessage';
+import { PointUpdate } from '@wonder/core/models/PointUpdate';
+import { PointsUpdateMessage } from '@wonder/core/models/websocket/PointsUpdateMessage';
 
 @Component({
   selector: 'app-running-game',
   templateUrl: './running-game.component.html',
   styleUrls: ['./running-game.component.css'],
 })
-export class RunningGameComponent implements OnInit, OnChanges {
-  @Input()
-  currentGame: Game;
-  @Input()
-  user: User;
+export class RunningGameComponent
+  implements OnInit, OnChanges, OnDestroy, GameMessageReceiver {
+  @Input() currentGame: Game;
+  @Input() user: User;
+  @Output() finished: EventEmitter<number> = new EventEmitter<number>();
 
-  formControls = {
-    military: new FormControl(null),
-    coins: new FormControl(null),
-    wonders: new FormControl(null),
-    culture: new FormControl(null),
-    trade: new FormControl(null),
-    guild: new FormControl(null),
-    science: new FormControl(null),
-    cities: new FormControl(null),
-    leaders: new FormControl(null),
-    shipyard: new FormControl(null),
-    islands: new FormControl(null),
-  };
-  form: FormGroup = new FormGroup(this.formControls);
-  gameWebSocket: GameWebSocket;
-  subscriptions: Subscription[] = [];
-  gameId: number;
+  private gameWebSocket: GameWebSocket;
+  private gameId: number;
+  private gameChanged = false;
+
+  form: FormGroup;
+  formControls;
+  gameComponents;
+  gameLoaded = false;
   faCalculator: IconDefinition = faCalculator;
-
-  @Input()
-  hasLeft: Observable<boolean>;
-
-  @Output()
-  finished: EventEmitter<number> = new EventEmitter<number>();
-
-  @Output()
-  playerChanged: EventEmitter<any> = new EventEmitter<any>();
-
-  formUpdating = {
-    military: false,
-    coins: false,
-    wonders: false,
-    culture: false,
-    trade: false,
-    guild: false,
-    science: false,
-    cities: false,
-    leaders: false,
-  };
-
   total = 0;
 
-  pointsLoaded = false;
-  gameChanged = false;
-
-  constructor(private matDialog: MatDialog) {}
+  constructor(private matDialog: MatDialog, private gameService: GameService) {}
 
   ngOnInit(): void {
-    // this.calculateScience();
+    this.buildForm();
+    this.generateGameComponents();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.currentGame) {
+      const game: Game = changes.currentGame.currentValue;
+      if (game.id !== this.gameId) {
+        this.gameId = game.id;
+        this.gameChanged = true;
+        this.closeGameWebSocket();
+      }
+      if (!this.gameWebSocket) {
+        this.gameWebSocket = this.initGameWebSocket();
+        this.initGame();
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.closeGameWebSocket();
+  }
+
+  private initGameWebSocket(): GameWebSocket {
+    return new GameWebSocket(this.gameId, this as Component);
+  }
+
+  private buildForm(): void {
+    this.form = this.gameService.buildPointForm();
+  }
+
+  private generateGameComponents(): void {
+    this.gameComponents = this.gameService.generateGameFormComponents(
+      this.form
+    );
   }
 
   private closeGameWebSocket(): void {
@@ -97,123 +98,47 @@ export class RunningGameComponent implements OnInit, OnChanges {
       this.gameWebSocket.close();
       this.gameWebSocket = null;
     }
+
+    this.gameLoaded = false;
+  }
+
+  private initGame(): void {
+    const pointMessageObserver: PartialObserver<any> = {
+      next: (message) => this.onPointMessage(message),
+      error: (err) => WebsocketService.routerInstance.navigate(['/error']),
+    };
+    this.gameService
+      .initGame(this.gameWebSocket, this.user.id)
+      .subscribe(pointMessageObserver);
+  }
+
+  private updateFormControl(
+    control: FormControl,
+    value: string | number,
+    emitEvent: boolean = true
+  ): void {
+    let options;
+    if (!emitEvent) {
+      options = { emitEvent: false, emitViewToModelChange: false };
+    }
+    control.setValue(value, options);
+  }
+
+  private updatePoints(points: Point[]): void {
+    points.forEach((point: Point) => {
+      const control = this.gameComponents[point.type.value - 1].formControl;
+      this.updateFormControl(control, point.value, false);
+    });
+    this.recountTotal();
   }
 
   private recountTotal(): void {
-    this.total = Object.keys(this.form.value).reduce((sum, key) => {
-      let value = '' + this.form.get(key).value;
-      if (value.includes('+')) {
-        value = value.replace(/\s/g, '');
-        if (value.includes('=')) {
-          value = value.slice(0, value.indexOf('='));
-        }
-        const values = value.split('+');
-        const points = values.map((v) => +v).reduce((a, b) => a + b);
-        return sum + points;
-      } else {
-        return sum + parseFloat(this.form.get(key).value || 0);
-      }
-    }, 0);
+    this.total = this.gameService.recountTotal(this.form.value);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.subscriptions.length) {
-      this.subscriptions.forEach((sub) => {
-        sub.unsubscribe();
-      });
-    }
-    this.subscriptions = [];
-    console.log(changes);
-    if (changes.currentGame) {
-      const game: Game = changes.currentGame.currentValue;
-      console.log(game.id, this.gameId);
-      if (game.id !== this.gameId) {
-        this.gameId = game.id;
-        this.gameChanged = true;
-        this.closeGameWebSocket();
-      }
-    }
-
-    if (!this.form || !this.gameWebSocket) {
-      this.formControls = {
-        military: new FormControl(null),
-        coins: new FormControl(null),
-        wonders: new FormControl(null),
-        culture: new FormControl(null),
-        trade: new FormControl(null),
-        guild: new FormControl(null),
-        science: new FormControl(null),
-        cities: new FormControl(null),
-        leaders: new FormControl(null),
-        shipyard: new FormControl(null),
-        islands: new FormControl(null),
-      };
-      this.form = new FormGroup(this.formControls);
-    }
-
-    if (!this.gameWebSocket) {
-      this.gameWebSocket = new GameWebSocket(
-        this.currentGame.id,
-        this as Component
-      );
-    }
-
-    const keys = Object.keys(this.formControls);
-
-    keys.forEach((key, index) => {
-      const control = this.formControls[key] as FormControl;
-      this.subscriptions.push(
-        control.valueChanges
-          .pipe(
-            debounceTime(1000),
-            switchMap((value: string) => {
-              this.formUpdating[key] = true;
-              value = '' + value;
-              if (value.includes('+')) {
-                return EMPTY;
-              }
-
-              return this.gameWebSocket.updatePoint(
-                this.currentGame.id,
-                this.user.id,
-                index + 1,
-                +value
-              );
-            })
-          )
-          .subscribe({
-            next: (message) => {
-              this.formUpdating[keys[message.point_type - 1]] = false;
-              this.recountTotal();
-            },
-            error: (err) => {
-              console.log(err);
-              WebsocketService.instance.router.navigate(['/error']);
-            },
-          })
-      );
-    });
-
-    console.log(this.gameChanged);
-    if (this.gameChanged) {
-      this.gameWebSocket
-        .getPoints(this.currentGame.id, this.user.id)
-        .subscribe({
-          next: (message) => {
-            const points = message.points;
-            points.forEach((point) => {
-              this.form.controls[keys[point.type - 1]].setValue(point.value);
-            });
-            this.recountTotal();
-            this.pointsLoaded = true;
-          },
-          error: (err) => {
-            console.log(err);
-            WebsocketService.instance.router.navigate(['/error']);
-          },
-        });
-      this.gameChanged = false;
-    }
+  private onPointMessage(message: PointsUpdateMessage): void {
+    this.updatePoints(message.points);
+    this.gameLoaded = true;
   }
 
   calculateScience(): void {
@@ -222,60 +147,42 @@ export class RunningGameComponent implements OnInit, OnChanges {
     dialog
       .afterClosed()
       .pipe(filter((x) => x))
-      .subscribe((d) => {
-        this.formControls.science.setValue(d);
-        this.onInputBlurred(d, 'science');
+      .subscribe((value) => {
+        // TODO: Change to enum
+        const scienceKey = Object.keys(this.formControls).indexOf('science');
+        const pointType = this.gameComponents[scienceKey].pointType;
+        const pointValue = calculateControlValue(value);
+        this.formControls.science.setValue(`${value}=${pointValue}`);
+        this.onPointChange({
+          type: pointType,
+          value: pointValue,
+        });
+        this.recountTotal();
       });
+  }
+
+  onPointChange(pointUpdate: PointUpdate): void {
+    const point: Point = {
+      ...pointUpdate,
+      game: this.currentGame.id,
+      player: this.user.id,
+    };
+    this.gameService.updatePoint(this.gameWebSocket, point, () =>
+      WebsocketService.routerInstance.navigate(['/error'])
+    );
+  }
+
+  onPointUpdate(message: PointUpdateMessage): void {
+    if (message.player === this.user.id) {
+      const control = this.gameComponents[message.point_type - 1].formControl;
+      this.updateFormControl(control, message.value, false);
+      this.recountTotal();
+    }
   }
 
   onGameInfoMessage(message): void {}
 
   onFinishGameMessage(message): void {
     this.finished.emit(this.currentGame.id);
-  }
-
-  onInputFocus(value, pointType): void {
-    value = '' + value;
-
-    if (value.includes('=')) {
-      const newValue = value.slice(0, value.indexOf('='));
-      const control = this.formControls[pointType] as FormControl;
-      control.setValue(newValue, {
-        emitEvent: false,
-        emitViewToModelChange: false,
-      });
-    }
-  }
-
-  onInputBlurred(value, pointType): void {
-    value = '' + value;
-    if (value.includes('+')) {
-      value = value.replace(/\s/g, '');
-      if (value.includes('=')) {
-        value = value.slice(0, value.indexOf('='));
-      }
-      const values = value.split('+');
-      const points = values.map((v) => +v).reduce((a, b) => a + b);
-
-      const type = Object.keys(this.formControls).indexOf(pointType);
-
-      this.gameWebSocket
-        .updatePoint(this.currentGame.id, this.user.id, type + 1, points)
-        .subscribe({
-          next: (message) => {
-            const control = this.formControls[pointType] as FormControl;
-            const newValue = `${control.value}=${points}`;
-            control.setValue(newValue, {
-              emitEvent: false,
-              emitViewToModelChange: false,
-            });
-            this.recountTotal();
-          },
-          error: (err) => {
-            console.log(err);
-            WebsocketService.instance.router.navigate(['/error']);
-          },
-        });
-    }
   }
 }

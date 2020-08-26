@@ -1,0 +1,11 @@
+.loading-content {
+  min-width: 400px;
+  min-height: 400px;
+}
+
+@media screen and (max-width: 767px) {
+  .loading-content {
+    min-width: 70vw;
+    min-height: 70vh;
+  }
+}

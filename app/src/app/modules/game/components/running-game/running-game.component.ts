@@ -174,7 +174,8 @@ export class RunningGameComponent
 
   onPointUpdate(message: PointUpdateMessage): void {
     if (message.player === this.user.id) {
-      const control = this.gameComponents[message.point_type - 1].formControl;
+      const control = this.gameComponents[message.point_type.value - 1]
+        .formControl;
       this.updateFormControl(control, message.value, false);
       this.recountTotal();
     }

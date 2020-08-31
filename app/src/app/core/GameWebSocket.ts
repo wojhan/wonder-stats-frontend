@@ -48,6 +48,7 @@ export class GameWebSocket implements WebSocketI {
 
     this.webSocketSubscription = this.webSocketListener
       .pipe(retryPipe)
+      .pipe(delay(800))
       .subscribe({
         next: (message) => {
           this.onMessage(message);
@@ -78,6 +79,12 @@ export class GameWebSocket implements WebSocketI {
         this.spinner.hide();
       }
     }
+
+    if (message.message_type === 'point_update') {
+      const keys = Object.keys(PointType);
+      message.point_type = PointType[keys[message.point_type - 1]];
+    }
+
     if (!message.sender) {
       const property = {
         point_update: 'onPointUpdate',
@@ -111,7 +118,7 @@ export class GameWebSocket implements WebSocketI {
     value: number
   ): Observable<any> {
     this.messages++;
-    this.spinner.show();
+    // this.spinner.show();
     const sender = getRandomHash();
     this.webSocketSubject.next({
       type: 'update_point_request',
@@ -129,11 +136,11 @@ export class GameWebSocket implements WebSocketI {
           message.sender === sender
       ),
       take(1),
-      timeout(5000)
+      timeout(10000)
     );
   }
 
-  getPoints(gameId: number, playerId: number): Observable<any> {
+  getPoints(gameId: number, playerId: number): Observable<PointsUpdateMessage> {
     this.messages++;
     this.spinner.show();
 
@@ -160,7 +167,7 @@ export class GameWebSocket implements WebSocketI {
         return message;
       }),
       take(1),
-      timeout(5000)
+      timeout(10000)
     );
   }
 
@@ -182,7 +189,7 @@ export class GameWebSocket implements WebSocketI {
           message.sender === sender
       ),
       take(1),
-      timeout(5000)
+      timeout(10000)
     );
   }
 }

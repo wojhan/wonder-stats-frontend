@@ -125,7 +125,7 @@ export class LobbyWebSocket implements WebSocketI {
           message.sender === sender
       ),
       take(1),
-      timeout(5000),
+      timeout(10000),
       map((message) => message.game)
     );
   }
@@ -146,7 +146,7 @@ export class LobbyWebSocket implements WebSocketI {
           msg.message_type === 'create_game_response' && msg.sender === sender
       ),
       take(1),
-      timeout(5000)
+      timeout(10000)
     );
   }
 
@@ -168,7 +168,7 @@ export class LobbyWebSocket implements WebSocketI {
           message.sender === sender
       ),
       take(1),
-      timeout(5000),
+      timeout(10000),
       map((message) => message.game)
     );
   }

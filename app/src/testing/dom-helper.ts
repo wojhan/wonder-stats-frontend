@@ -17,6 +17,10 @@ export class DOMHelper<T> {
     return this.fixture.debugElement.query(By.css(tagName)).nativeNode.value;
   }
 
+  isDisabled(tagName: string): boolean {
+    return this.fixture.debugElement.query(By.css(tagName)).nativeNode.disabled;
+  }
+
   count(tagName: string): number {
     return this.fixture.debugElement.queryAll(By.css(tagName)).length;
   }

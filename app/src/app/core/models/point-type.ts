@@ -27,7 +27,7 @@ export class PointType {
     'cities',
   ]);
   static readonly LEADERS = new PointType('LEADERS', 9, 'punkty za liderów', [
-    'leaders',
+    'image',
   ]);
   static readonly SHIPYARD = new PointType(
     'SHIPYARD',
